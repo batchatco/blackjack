@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1a0a00">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <title>Blackjack - Las Vegas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Table Selection Screen -->
+    <div id="table-select" class="screen active">
+      <div class="venetian-header">
+        <div class="header-ornament"></div>
+        <h1>LAS VEGAS</h1>
+        <p class="game-title">Double Deck Blackjack</p>
+      </div>
+      <div id="casino-list" class="casino-list"></div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen">
+      <div class="game-header">
+        <div class="header-left">
+          <span id="table-name" class="table-name"></span>
+          <span id="table-limits" class="table-limits-header"></span>
+          <button id="change-table-btn" class="link-btn">Change Table</button>
+        </div>
+        <div class="header-center">
+          <button id="strategy-chart-btn" class="link-btn help-btn">Strategy</button>
+          <button id="help-btn" class="link-btn help-btn">Help</button>
+        </div>
+        <div class="header-right">
+          <span class="bankroll-label">Bankroll</span>
+          <span id="bankroll" class="bankroll-amount">$0</span>
+          <button id="reset-bankroll-btn" class="link-btn reset-btn">Reset</button>
+        </div>
+      </div>
+
+      <div class="felt">
+        <!-- Shoe indicator -->
+        <div class="shoe-indicator">
+          <div class="shoe-bar">
+            <div id="shoe-remaining" class="shoe-fill"></div>
+          </div>
+          <span class="shoe-label">Shoe</span>
+        </div>
+
+        <!-- Dealer area -->
+        <div class="dealer-area">
+          <div class="hand-label">DEALER</div>
+          <div id="dealer-cards" class="cards"></div>
+          <div id="dealer-score" class="score"></div>
+        </div>
+
+        <!-- Message area -->
+        <div id="message" class="message"></div>
+
+        <!-- Player hands -->
+        <div id="player-hands" class="player-area"></div>
+
+        <!-- Action buttons -->
+        <div id="actions" class="actions hidden"></div>
+
+        <!-- Hint area (Strategy / KO) -->
+        <div id="hint-area" class="hint-area"></div>
+
+        <!-- Insurance prompt -->
+        <div id="insurance-prompt" class="insurance-prompt hidden">
+          <p id="insurance-label">Insurance?</p>
+          <div class="insurance-buttons">
+            <button id="insurance-yes" class="action-btn insurance-btn">Yes</button>
+            <button id="insurance-no" class="action-btn insurance-btn">No</button>
+          </div>
+        </div>
+
+        <!-- Betting area -->
+        <div id="betting-area" class="betting-area hidden">
+          <div class="bet-display">
+            Bet: <span id="current-bet" class="bet-amount">$0</span>
+          </div>
+          <div id="chip-rack" class="chip-rack"></div>
+          <div class="bet-actions">
+            <button id="clear-bet" class="bet-btn">Clear</button>
+            <button id="deal-btn" class="bet-btn deal-btn-highlight">Deal</button>
+          </div>
+        </div>
+
+        <!-- New round button -->
+        <button id="new-round-btn" class="action-btn new-round-btn hidden">New Hand</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
