@@ -353,8 +353,8 @@ body {
 /* ===== CARDS ===== */
 
 .card {
-  width: 65px;
-  height: 91px;
+  width: 80px;
+  height: 112px;
   border-radius: 6px;
   position: relative;
   display: inline-flex;
@@ -408,11 +408,11 @@ body {
 }
 
 .card .card-corner .card-rank {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .card .card-corner .card-suit-small {
-  font-size: 11px;
+  font-size: 13px;
   margin-top: -1px;
 }
 
@@ -428,7 +428,7 @@ body {
 }
 
 .card .card-center {
-  font-size: 28px;
+  font-size: 34px;
 }
 
 .card.red {
@@ -1083,15 +1083,15 @@ body {
 
 @media (max-width: 380px) {
   .card {
-    width: 52px;
-    height: 73px;
+    width: 62px;
+    height: 87px;
     margin-left: -14px;
     border-radius: 5px;
   }
   .card:first-child { margin-left: 0; }
-  .card .card-corner .card-rank { font-size: 11px; }
-  .card .card-corner .card-suit-small { font-size: 9px; }
-  .card .card-center { font-size: 22px; }
+  .card .card-corner .card-rank { font-size: 13px; }
+  .card .card-corner .card-suit-small { font-size: 10px; }
+  .card .card-center { font-size: 26px; }
   .card .card-top { top: 3px; left: 3px; }
   .card .card-bottom { bottom: 3px; right: 3px; }
   .chip { width: 46px; height: 46px; font-size: 11px; }
@@ -1107,7 +1107,7 @@ body {
     flex: 1;
   }
   .card {
-    width: 75px;
-    height: 105px;
+    width: 90px;
+    height: 126px;
   }
 }
