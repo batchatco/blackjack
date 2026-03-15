@@ -90,6 +90,24 @@ body {
   font-weight: 300;
 }
 
+.app-footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-bottom: 20px;
+}
+
+.app-version {
+  font-size: 11px;
+  color: rgba(255,255,255,0.3);
+  margin-right: 8px;
+}
+
+.update-btn {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  padding: 2px 6px;
+}
+
 .casino-list {
   width: 100%;
   max-width: 700px;

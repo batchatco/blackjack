@@ -3,6 +3,8 @@
 // With Basic Strategy + KO (Knockout) Count Advisor
 // ============================================================
 
+const APP_VERSION = '1.1';
+
 // ===== CASINO CONFIGURATIONS =====
 
 const CASINOS = {
@@ -1843,8 +1845,25 @@ function setupEventListeners() {
 
 // ===== INIT =====
 
+function checkForUpdates() {
+  if (!('serviceWorker' in navigator)) {
+    location.reload();
+    return;
+  }
+  caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k)))).then(() => {
+    navigator.serviceWorker.getRegistrations().then(regs => {
+      Promise.all(regs.map(r => r.unregister())).then(() => {
+        location.reload();
+      });
+    });
+  });
+}
+
 function init() {
   setupEventListeners();
+
+  document.getElementById('app-version').textContent = 'v' + APP_VERSION;
+  document.getElementById('check-update-btn').addEventListener('click', checkForUpdates);
 
   const savedTable = loadTablePref();
   if (savedTable && TABLE_CONFIGS[savedTable]) {
