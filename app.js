@@ -3,7 +3,7 @@
 // With Basic Strategy + KO (Knockout) Count Advisor
 // ============================================================
 
-const APP_VERSION = '1.2';
+const APP_VERSION = '1.3';
 
 // ===== CASINO CONFIGURATIONS =====
 
@@ -1870,11 +1870,13 @@ function setupEventListeners() {
       if (e.key === 'Enter') startDeal();
       if (e.key === '=' || e.key === '+') adjustBet(1);
       if (e.key === '-' || e.key === '_') adjustBet(-1);
+      if (e.key === '?') { game.showKO = !game.showKO; renderHints(); }
     } else if (game.state === 'ROUND_OVER') {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         newRound();
       }
+      if (e.key === '?') { game.showKO = !game.showKO; renderHints(); }
     } else if (game.state === 'INSURANCE') {
       if (e.key.toLowerCase() === 'y') takeInsurance();
       if (e.key.toLowerCase() === 'n') declineInsurance();
