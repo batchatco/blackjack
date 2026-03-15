@@ -3,7 +3,7 @@
 // With Basic Strategy + KO (Knockout) Count Advisor
 // ============================================================
 
-const APP_VERSION = '1.1';
+const APP_VERSION = '1.2';
 
 // ===== CASINO CONFIGURATIONS =====
 
@@ -677,7 +677,9 @@ function startDeal() {
     surrendered: false,
     doubled: false,
     fromSplitAces: false,
+    bsMistake: null, // { recommended, played, reason }
   }];
+  game.bsMistakes = [];
 
   // Deal: player, dealer up, player, dealer hole
   const p1 = game.shoe.deal();
@@ -813,10 +815,29 @@ function hideHints() {
   game.showKO = false;
 }
 
+function actionLabel(action) {
+  const labels = { Hit: 'Hit', Stand: 'Stand', Double: 'Double down', Split: 'Split', Surrender: 'Surrender' };
+  return labels[action] || action;
+}
+
+function checkBSMistake(hand, playerAction) {
+  if (hand.cards.length !== 2 || hand.bsMistake !== null) return;
+  const bs = getBasicStrategy(hand, game.dealerCards[0], game.config);
+  if (bs.action !== playerAction) {
+    hand.bsMistake = {
+      recommended: bs.action,
+      played: playerAction,
+      reason: bs.reason,
+    };
+    game.bsMistakes.push(hand.bsMistake);
+  }
+}
+
 function hit() {
   if (game.state !== 'PLAYER_TURN') return;
   hideHints();
   const hand = currentHand();
+  checkBSMistake(hand, 'Hit');
   const card = game.shoe.deal();
   hand.cards.push(card);
   countCard(card);
@@ -835,6 +856,7 @@ function hit() {
 function stand() {
   if (game.state !== 'PLAYER_TURN') return;
   hideHints();
+  checkBSMistake(currentHand(), 'Stand');
   moveToNextHand();
 }
 
@@ -844,6 +866,7 @@ function doubleDown() {
   const hand = currentHand();
   if (hand.cards.length !== 2) return;
   if (hand.bet > game.bankroll) return;
+  checkBSMistake(hand, 'Double');
 
   game.bankroll -= hand.bet;
   hand.bet *= 2;
@@ -870,6 +893,7 @@ function split() {
 
   const isAces = hand.cards[0].rank === 'A';
   if (hand.fromSplitAces && !game.config.resplitAces) return;
+  checkBSMistake(hand, 'Split');
 
   game.bankroll -= hand.bet;
 
@@ -883,6 +907,7 @@ function split() {
     surrendered: false,
     doubled: false,
     fromSplitAces: isAces,
+    bsMistake: null,
   };
   hand.fromSplitAces = isAces;
 
@@ -938,6 +963,7 @@ function surrender() {
   const hand = currentHand();
   if (hand.cards.length !== 2) return;
   if (game.playerHands.length > 1) return;
+  checkBSMistake(hand, 'Surrender');
 
   hand.surrendered = true;
   hand.settled = true;
@@ -1376,8 +1402,21 @@ function render() {
 
   // Message
   const msgEl = document.getElementById('message');
-  msgEl.textContent = game.message;
+  msgEl.innerHTML = '';
+  const msgText = document.createElement('div');
+  msgText.textContent = game.message;
+  msgEl.appendChild(msgText);
   msgEl.className = 'message ' + game.messageClass;
+
+  // BS mistake feedback at round end
+  if (game.state === 'ROUND_OVER' && game.bsMistakes && game.bsMistakes.length > 0) {
+    for (const m of game.bsMistakes) {
+      const tip = document.createElement('div');
+      tip.className = 'bs-mistake';
+      tip.textContent = `Basic strategy: ${actionLabel(m.recommended)} (${m.reason}), you chose ${actionLabel(m.played)}`;
+      msgEl.appendChild(tip);
+    }
+  }
 
   // Player hands
   renderPlayerHands();
@@ -1839,6 +1878,7 @@ function setupEventListeners() {
     } else if (game.state === 'INSURANCE') {
       if (e.key.toLowerCase() === 'y') takeInsurance();
       if (e.key.toLowerCase() === 'n') declineInsurance();
+      if (e.key === '?') { game.showStrategy = !game.showStrategy; game.showKO = !game.showKO; renderHints(); }
     }
   });
 }
